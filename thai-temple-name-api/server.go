@@ -11,10 +11,8 @@ import (
 func main() {
 	r := gin.Default()
 
-	r.GET("/", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "homepage",
-		})
+	r.GET("/", func(ctx *gin.Context) {
+		ctx.String(200, `visit /temples to get data <a href="/temples"></a>`)
 	})
 
 	r.GET("/temples", func(ctx *gin.Context) {
@@ -34,5 +32,6 @@ func main() {
 		ctx.String(200, string(raw_data))
 
 	})
+	fmt.Println("Server is running on http://localhost:8080")
 	r.Run(":8080") // listen and serve on
 }
