@@ -5,5 +5,11 @@ def write_string_to_file(string, filename):
         f.write(string)
         f.close()
 
-def export_csv(data, filename):
-    pass
+def export_csv(data,header, filename, delimiter=','):
+    with open(filename, 'w+') as f:
+        f.write(delimiter.join(header) + '\n')
+
+        for row in data:
+            f.write(delimiter.join(row.values()) + '\n')
+
+        f.close()
