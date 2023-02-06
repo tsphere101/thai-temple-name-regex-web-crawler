@@ -29,12 +29,12 @@ def main():
 
         print(f'{len(extracted_data)} found')
 
-        utils.export_csv(records,headers,province+'.csv')
+        utils.export_csv(records,headers,'../' + province+'.csv')
 
         all_records += records
 
     print(f'{len(all_records)} found in total')
-    utils.export_csv(all_records,headers,'temples.csv')
+    utils.export_csv(all_records,headers,'../temples.csv')
 
 
 if __name__ == "__main__":
