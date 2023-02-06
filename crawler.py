@@ -12,9 +12,8 @@ class Crawler:
 
     def trim(self):
         # get only the content of the page 
-        self.response = re.search(r'(?<=<div class="mw-parser-output">).*?(?=</div>)', self.response, re.DOTALL).group(0)
+        # self.response = re.search(r'(?<=<div class="mw-parser-output">).*?(?=</div>)', self.response, re.DOTALL).group(0)
         
-        print(self.response)
         return self
 
     def extract(self,regex):
