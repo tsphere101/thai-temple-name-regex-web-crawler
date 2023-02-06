@@ -34,5 +34,7 @@ func main() {
 		ctx.String(200, string(raw_data))
 
 	})
+	fmt.Println("Server is running on http://localhost:80")
 	r.Run(":80") // listen and serve on
+
 }
