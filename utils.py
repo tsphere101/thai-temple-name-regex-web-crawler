@@ -6,7 +6,7 @@ def write_string_to_file(string, filename):
         f.close()
 
 def export_csv(data,header, filename, delimiter=','):
-    with open(filename, 'w+') as f:
+    with open(filename, 'w+', encoding='utf-8') as f:
         f.write(delimiter.join(header) + '\n')
 
         for row in data:
