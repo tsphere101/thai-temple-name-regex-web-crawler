@@ -23,11 +23,11 @@ def main():
 
         print(f'{len(extracted_data)} found')
 
+        # write to csv on each province
+        utils.write_string_to_file('\n'.join(x for x in extracted_data), province+'.csv')
 
         all_temple_names += extracted_data
 
-    # write to file
-    utils.write_string_to_file( '\n'.join(name for name in all_temple_names) , 'temples.txt')
 
 if __name__ == "__main__":
     main()
