@@ -12,7 +12,7 @@ func main() {
 	r := gin.Default()
 
 	r.GET("/", func(ctx *gin.Context) {
-		ctx.String(200, `visit /temples to get data <a href="/temples"></a>`)
+		ctx.String(200, `visit /temples to get data`)
 	})
 
 	r.GET("/temples", func(ctx *gin.Context) {
