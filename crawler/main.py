@@ -14,27 +14,24 @@ REGEXP = r'(?<=title=")วัด.*?(?="|\s\()'
 
 def main():
     all_records = []
-    headers = ['Province', 'Temple Name']
 
     for province, url in URLs.items():
         records = []
         print('Crawling: '+province)
         cl = crawler.Crawler(url)
-        extracted_data = cl.get().trim().extract(REGEXP)
+        records = cl.get().trim().extract(REGEXP)
         
-        # remove last 2 items
-        extracted_data = extracted_data[:len(extracted_data)-2]
+        # remove last 2 items : "วัดไทย"
+        records = records[:len(records)-2]
 
-        records = [{headers[0]: province, headers[1]: temple_name} for temple_name in extracted_data]
+        print(f'{len(records)} found')
 
-        print(f'{len(extracted_data)} found')
-
-        utils.export_csv(records,headers,'../' + province+'.csv')
+        utils.export_csv(records,header=None,filename='../' + province+'.csv')
 
         all_records += records
 
     print(f'{len(all_records)} found in total')
-    utils.export_csv(all_records,headers,'../temples.csv')
+    utils.export_csv(all_records,header=None,filename='../temples.csv')
 
 
 if __name__ == "__main__":
