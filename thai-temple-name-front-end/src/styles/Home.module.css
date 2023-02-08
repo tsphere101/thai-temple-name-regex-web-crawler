@@ -276,3 +276,19 @@
     transform: rotate(0deg);
   }
 }
+
+.underline {
+  text-decoration: underline;
+}
+
+.paddingNormal {
+  padding: 0.5rem;
+}
+
+.marginNormal {
+  margin: 0.5rem;
+}
+
+.paddingLeft{
+  padding: 0rem 0rem 0rem 2rem;
+}
