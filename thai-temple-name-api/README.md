@@ -1,3 +1,5 @@
+Run server executable file for the services.
+
 visit /temples to get data
 Example: /temples?province=kalasin&province=kamphaengphet		
 
