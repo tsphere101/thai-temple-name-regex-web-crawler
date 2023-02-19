@@ -1,5 +1,4 @@
 import re
-import utils
 import requests
 
 class Crawler:
@@ -19,3 +18,5 @@ class Crawler:
     def extract(self,regex):
         extracted_data = re.findall(regex, self.response)
         return extracted_data
+
+    
