@@ -7,16 +7,30 @@ const inter = Inter({ subsets: ['latin'] })
 export const getStaticProps = async () => {
 
   // Read the csv file from the public folder
-  const res = await fetch('http://localhost:3000/temples.csv')
-  const data = await res.text()
+  // const res = await fetch('http://localhost:3000/temples.csv')
+  // const data = await res.text()
 
   // Split the csv file into an array of rows
-  const rows = data.split('\n')
+  // const rows = data.split('\n')
 
+
+  // return {
+  //   props: { temples: rows }
+  // }
+
+  const res = await fetch('http://localhost:3000/temples.csv')
+
+  // return list of temples
+  // split the csv file into an array of rows
+  const data = await res.text()
+  const arr = data.split('\n')
+  
 
   return {
-    props: { temples: rows }
+    props: { temples: arr }
+
   }
+    
 }
 
 
@@ -27,7 +41,6 @@ const Names = ({ temples }) => {
         <h3>
           Temples in Kalasin, Kamphaeng Phet,KhonKaen and Jantaburi.
         </h3>
-        <p className={inter.className}>{temples.length} entries</p>
       </div>
 
     {/* download button */}
@@ -38,9 +51,11 @@ const Names = ({ temples }) => {
     </div>
 
       <ul className={(styles.paddingLeft)}>
-        {temples.map((temple, index) => (
-          <li key={index}>{temple}</li>
-        ))}
+
+    {temples.map((temple, index) => (
+      <li key={index}>{temple}</li>
+    ))}
+
       </ul>
 
     </div>
