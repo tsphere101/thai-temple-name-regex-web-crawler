@@ -8,11 +8,16 @@ import (
 	"os/exec"
 	"strings"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
 	r := gin.Default()
+
+	config := cors.DefaultConfig()
+	config.AllowAllOrigins = true
+	r.Use(cors.New(config))
 
 	r.GET("/", func(ctx *gin.Context) {
 		ctx.String(200, `
@@ -67,13 +72,16 @@ kalasin, kamphaengphet, khonkaen, jantaburi
 			payload = string(raw_data)
 		}
 
-		ctx.String(http.StatusOK, string(payload))
+		names := strings.Split(payload, "\n")
+		names = names[:len(names)-1]
+
+		ctx.JSON(http.StatusOK, names)
 
 	})
 
 	// Download csv file
 	r.GET("/download", func(ctx *gin.Context) {
-		// TODO : join the query provinces csv file into one file
+		// TODO: join the query provinces csv file into one file
 		// response the file to download, and delete the file
 		// after download
 
@@ -92,12 +100,15 @@ kalasin, kamphaengphet, khonkaen, jantaburi
 			fmt.Println(err)
 		}
 		writer := csv.NewWriter(output)
+		writer.UseCRLF = true
+		writer.Write([]string{string('\uFEFF')}) // Write the UTF-8 BOM to the beginning of the file to help with Excel compatibility
 		for _, province := range queryProvinces {
 			file, err := os.Open(fmt.Sprintf("../%s.csv", province))
 			if err != nil {
 				fmt.Println(err)
 			}
 			reader := csv.NewReader(file)
+			reader.Comma = ';'
 			for {
 				record, err := reader.Read()
 				if err != nil {
@@ -111,7 +122,8 @@ kalasin, kamphaengphet, khonkaen, jantaburi
 		output.Close()
 		writer.Flush()
 
-		// Response download, with filename
+		// Response download, with filename and UTF-8 encoding
+		ctx.Header("Content-Type", "text/csv; charset=utf-8")
 		ctx.Header("Content-Disposition", "attachment; filename="+filename)
 
 		// Response file
@@ -123,6 +135,6 @@ kalasin, kamphaengphet, khonkaen, jantaburi
 		}
 	})
 
-	fmt.Println("Server is running on http://localhost:8080")
-	r.Run(":8080") // listen and serve on
+	fmt.Println("Server is running on http://localhost:3000")
+	r.Run(":3000") // listen and serve on
 }
