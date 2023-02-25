@@ -10,7 +10,7 @@ def export_csv(data : list,header: list, filename:str, delimiter=','):
     # if header is None add each element in data to csv file: 
     if not header :
             
-        with open(filename, 'w+', encoding='utf-8') as f:
+        with open(filename, 'w', encoding='utf-8') as f:
             for d in data:
                 f.write(d + '\n')
             f.close()
