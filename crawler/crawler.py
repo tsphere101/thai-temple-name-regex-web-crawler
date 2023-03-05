@@ -3,20 +3,63 @@ import re
 import utils
 import json
 
+# province_name is used for translating province name from thai to eng
 province_name = json.load(open("province_name.json"))
 
+
+# The HTMLParser class is a class that can be used to extract information from HTML strings.
 class HTMLParser:
     def __init__(self):
         pass
 
-    def get_anchor(self, html):
-        return re.findall(r'<a\s+[^>]*>',html)
+    def get_anchor(self, html:str):
+        """
+        Returns a list of all anchor tags in the input HTML.
 
-    def get_href(self, html):
+        Args:
+        html (str): The input HTML string.
+
+        Returns:
+        list: A list of anchor tags in the input HTML.
+        
+        Example usage:
+        html : '<html><body><a href="<https://www.example.com>">Link</a></body></html>'
+        returns : ['<a href="<https://www.example.com>">']
+        """
+        return re.findall(r'<a\\s+[^>]*>',html)
+
+    def get_href(self, html:str):
+        """
+        Returns a list of all href attributes in anchor tags in the input HTML.
+
+        Args:
+        html (str): The input HTML string.
+
+        Returns:
+        list: A list of href attributes in anchor tags in the input HTML.
+
+        Example usage:
+        html : '<html><body><a href="https://www.example.com">Link</a></body></html>'
+        returns : ['https://www.example.com']
+        """
         return re.findall(r'(?<=href=").*?(?=")', html)
 
-    def get_title(self, html):
+    def get_title(self, html:str):
+        """
+        Returns a list of all title attributes in anchor tags in the input HTML.
+
+        Args:
+        html (str): The input HTML string.
+
+        Returns:
+        list: A list of title attributes in anchor tags in the input HTML.
+        
+        Example usage:
+        html : '<html><body><a href="https://www.example.com" title="Example Website">Link</a></body></html>'
+        returns : ['Example Website']
+        """
         return re.findall(r'(?<=title=").*?(?=")',html)
+
 
 class Crawler:
     def __init__(self,HOST,root_url,provinces:list,parser:HTMLParser) -> None:
