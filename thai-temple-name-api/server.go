@@ -94,6 +94,7 @@ kalasin, kamphaengphet, khonkaen, jantaburi
 		filename := strings.Join(queryProvinces, "-") + "-export" + ".csv"
 		if len(queryProvinces) == 0 {
 			filename = "all-temples-export.csv"
+			queryProvinces = []string{"kalasin", "kamphaengphet","jantaburi" ,"khonkaen"}
 		}
 		output, err := os.Create("../" + filename)
 		if err != nil {
@@ -127,12 +128,13 @@ kalasin, kamphaengphet, khonkaen, jantaburi
 		ctx.Header("Content-Disposition", "attachment; filename="+filename)
 
 		// Response file
-		if len(queryProvinces) != 0 {
-			ctx.File("../" + filename)
-		} else {
+		// if len(queryProvinces) != 0 {
+		// 	ctx.File("../" + filename)
+		// } else {
 			// If the query is empty, return all data
-			ctx.File("../temples.csv")
-		}
+			// ctx.File("../temples.csv")
+		// }
+		ctx.File("../" + filename)
 	})
 
 	fmt.Println("Server is running on http://localhost:3000")
