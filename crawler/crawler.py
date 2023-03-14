@@ -4,7 +4,23 @@ import utils
 import json
 
 # province_name is used for translating province name from thai to eng
-province_name = json.load(open("province_name.json"))
+# province_name = json.load(open("province_name.json"))
+
+province_name= {
+    "to_thai": {
+        "kalasin": "กาฬสินธุ์",
+        "kamphaengphet": "กำแพงเพชร",
+        "khonkaen": "ขอนแก่น",
+        "jantaburi": "จันทบุรี"
+    },
+    "to_eng": {
+        "กาฬสินธุ์": "kalasin",
+        "กำแพงเพชร": "kamphaengphet",
+        "ขอนแก่น": "khonkaen",
+        "จันทบุรี": "jantaburi"
+    }
+}
+
 
 
 class HTMLParser:
@@ -28,7 +44,7 @@ class HTMLParser:
         html : '<html><body><a href="<https://www.example.com>">Link</a></body></html>'
         returns : ['<a href="<https://www.example.com>">']
         """
-        return re.findall(r'<a\\s+[^>]*>', html)
+        return re.findall(r'<a\s+[^>]*>', html)
 
     def get_href(self, html: str):
         """

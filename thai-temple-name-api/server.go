@@ -87,15 +87,26 @@ kalasin, kamphaengphet, khonkaen, jantaburi
 
 		// Get query params
 		queryProvinces := ctx.QueryArray("province")
-
-		fmt.Println("Requesting for download : ", queryProvinces)
+		fmt.Println("queryProvinces are ", queryProvinces)
 
 		// Join csv files
 		filename := strings.Join(queryProvinces, "-") + "-export" + ".csv"
 		if len(queryProvinces) == 0 {
 			filename = "all-temples-export.csv"
-			queryProvinces = []string{"kalasin", "kamphaengphet","jantaburi" ,"khonkaen"}
+			queryProvinces = []string{"kalasin", "kamphaengphet", "jantaburi", "khonkaen"}
 		}
+
+		fmt.Println("Requesting for download : ", queryProvinces)
+
+		// Call python script to generate each province csv files
+		crawlerScriptPath := "../crawler/main.py"
+		arg := []string{crawlerScriptPath, "-p", strings.Join(queryProvinces, ",")}
+		out, err := exec.Command("python3", arg...).Output()
+		if err != nil {
+			fmt.Println("err:", err)
+		}
+		fmt.Println("out:", string(out))
+
 		output, err := os.Create("../" + filename)
 		if err != nil {
 			fmt.Println(err)
@@ -131,10 +142,11 @@ kalasin, kamphaengphet, khonkaen, jantaburi
 		// if len(queryProvinces) != 0 {
 		// 	ctx.File("../" + filename)
 		// } else {
-			// If the query is empty, return all data
-			// ctx.File("../temples.csv")
+		// If the query is empty, return all data
+		// ctx.File("../temples.csv")
 		// }
 		ctx.File("../" + filename)
+
 	})
 
 	fmt.Println("Server is running on http://localhost:3000")
