@@ -19,6 +19,8 @@ func main() {
 	config.AllowAllOrigins = true
 	r.Use(cors.New(config))
 
+	ALL_PROVINCE := []string{"kalasin", "kamphaengphet", "jantaburi", "khonkaen"}
+
 	r.GET("/", func(ctx *gin.Context) {
 		ctx.String(200, `
 visit /temples to get data
@@ -41,14 +43,20 @@ kalasin, kamphaengphet, khonkaen, jantaburi
 
 		// Get query params
 		queryProvinces := ctx.QueryArray("province")
-		fmt.Println("request for :", queryProvinces)
+		fmt.Println("queryProvinces:", queryProvinces)
+
+		if len(queryProvinces) == 0 {
+			queryProvinces = ALL_PROVINCE
+		}
 
 		// Run crawler python script
-		output, err := exec.Command("python", "..\\crawler\\main.py").Output()
+		crawlerScriptPath := "../crawler/main.py"
+		arg := []string{crawlerScriptPath, "-p", strings.Join(queryProvinces, ",")}
+		out, err := exec.Command("python", arg...).Output()
 		if err != nil {
 			fmt.Println(err)
 		}
-		fmt.Println(string(output))
+		fmt.Println(string(out))
 
 		// Read csv file
 		payload := ""
@@ -61,15 +69,6 @@ kalasin, kamphaengphet, khonkaen, jantaburi
 
 			// Append to payload
 			payload += string(raw_data)
-		}
-
-		// If the query is empty, return all data
-		if len(queryProvinces) == 0 {
-			raw_data, err := os.ReadFile("../temples.csv")
-			if err != nil {
-				fmt.Println(err)
-			}
-			payload = string(raw_data)
 		}
 
 		names := strings.Split(payload, "\n")
@@ -91,9 +90,11 @@ kalasin, kamphaengphet, khonkaen, jantaburi
 
 		// Join csv files
 		filename := strings.Join(queryProvinces, "-") + "-export" + ".csv"
+
+		// if the query is empty, export all provinces
 		if len(queryProvinces) == 0 {
 			filename = "all-temples-export.csv"
-			queryProvinces = []string{"kalasin", "kamphaengphet", "jantaburi", "khonkaen"}
+			queryProvinces = ALL_PROVINCE
 		}
 
 		fmt.Println("Requesting for download : ", queryProvinces)
@@ -101,7 +102,7 @@ kalasin, kamphaengphet, khonkaen, jantaburi
 		// Call python script to generate each province csv files
 		crawlerScriptPath := "../crawler/main.py"
 		arg := []string{crawlerScriptPath, "-p", strings.Join(queryProvinces, ",")}
-		out, err := exec.Command("python3", arg...).Output()
+		out, err := exec.Command("python", arg...).Output()
 		if err != nil {
 			fmt.Println("err:", err)
 		}
