@@ -1,5 +1,5 @@
 # Set the base image to the official Node.js 16.x image
-FROM node:16-alpine
+FROM node:19-alpine
 
 # Set the working directory
 WORKDIR /app
@@ -8,7 +8,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install production dependencies
-RUN npm install --production
+RUN npm install --production --force
 
 # Copy the rest of the application code to the working directory
 COPY . .

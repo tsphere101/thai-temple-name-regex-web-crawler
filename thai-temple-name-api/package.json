@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon -w . -e go,html,css,js --exec \"go build -o ./out/dist.exe && server-windows-amd64.exe\""
+    "start": "nodemon -w . -e go,html,css,js --exec \"go build -o server.exe && server.exe\""
   },
   "keywords": [],
   "author": "",

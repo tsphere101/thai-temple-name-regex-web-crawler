@@ -50,7 +50,7 @@ kalasin, kamphaengphet, khonkaen, jantaburi
 		}
 
 		// Run crawler python script
-		crawlerScriptPath := "../crawler/main.py"
+		crawlerScriptPath := "./crawler/main.py"
 		arg := []string{crawlerScriptPath, "-p", strings.Join(queryProvinces, ",")}
 		out, err := exec.Command("python", arg...).Output()
 		if err != nil {
@@ -62,7 +62,7 @@ kalasin, kamphaengphet, khonkaen, jantaburi
 		payload := ""
 		for _, province := range queryProvinces {
 			// Read province file
-			raw_data, err := os.ReadFile(fmt.Sprintf("../%s.csv", province))
+			raw_data, err := os.ReadFile(fmt.Sprintf("./%s.csv", province))
 			if err != nil {
 				fmt.Println(err)
 			}
@@ -100,7 +100,7 @@ kalasin, kamphaengphet, khonkaen, jantaburi
 		fmt.Println("Requesting for download : ", queryProvinces)
 
 		// Call python script to generate each province csv files
-		crawlerScriptPath := "../crawler/main.py"
+		crawlerScriptPath := "./crawler/main.py"
 		arg := []string{crawlerScriptPath, "-p", strings.Join(queryProvinces, ",")}
 		out, err := exec.Command("python", arg...).Output()
 		if err != nil {
@@ -108,7 +108,7 @@ kalasin, kamphaengphet, khonkaen, jantaburi
 		}
 		fmt.Println("out:", string(out))
 
-		output, err := os.Create("../" + filename)
+		output, err := os.Create("./" + filename)
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -116,7 +116,7 @@ kalasin, kamphaengphet, khonkaen, jantaburi
 		writer.UseCRLF = true
 		writer.Write([]string{string('\uFEFF')}) // Write the UTF-8 BOM to the beginning of the file to help with Excel compatibility
 		for _, province := range queryProvinces {
-			file, err := os.Open(fmt.Sprintf("../%s.csv", province))
+			file, err := os.Open(fmt.Sprintf("./%s.csv", province))
 			if err != nil {
 				fmt.Println(err)
 			}
@@ -146,10 +146,10 @@ kalasin, kamphaengphet, khonkaen, jantaburi
 		// If the query is empty, return all data
 		// ctx.File("../temples.csv")
 		// }
-		ctx.File("../" + filename)
+		ctx.File("./" + filename)
 
 	})
 
-	fmt.Println("Server is running on http://localhost:3000")
-	r.Run(":3000") // listen and serve on
+	fmt.Println("Server is running on http://localhost:8080")
+	r.Run(":8080") // listen and serve on
 }
