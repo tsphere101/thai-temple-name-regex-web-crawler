@@ -1,13 +1,9 @@
-import { FC, HTMLAttributes, useEffect, useState } from "react";
+import { FC, HTMLAttributes, useEffect, useState, ReactNode } from "react";
 import { Loader2 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 interface RegexInfoProps extends HTMLAttributes<HTMLDivElement> {}
-
-const CodeBlock = ({children})=>{
-  return <code className="bg-gray-300 rounded-sm p-1 text-sm">{children}</code>
-}
 
 const RegexInfo: FC<RegexInfoProps> = ({ className }) => {
   const [markdown, setMarkdown] = useState<string>("");
@@ -29,13 +25,29 @@ const RegexInfo: FC<RegexInfoProps> = ({ className }) => {
   }, []);
 
   return (
-    <ReactMarkdown
-      className={className}
-      remarkPlugins={[remarkGfm]}
-      components={{ code: CodeBlock}}
-    >
-      {markdown}
-    </ReactMarkdown>
+    <>
+      {isLoading && <Loader2 className={`${className} animate-spin`} />}
+      {!isLoading && (
+        <ReactMarkdown
+          className={className}
+          remarkPlugins={[remarkGfm]}
+          components={{
+            code({ node, inline, className, children, ...props }) {
+              return (
+                <code
+                  className={`${className} text-sm md:text-base bg-gray-300 rounded-sm`}
+                  {...props}
+                >
+                  {children}
+                </code>
+              );
+            },
+          }}
+        >
+          {markdown}
+        </ReactMarkdown>
+      )}
+    </>
   );
 };
 export default RegexInfo;
